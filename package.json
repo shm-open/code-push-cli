@@ -33,7 +33,7 @@
     "backslash": "^0.1.7",
     "chalk": "^4.1.0",
     "cli-table3": "^0.6.0",
-    "code-push": "2.0.6",
+    "code-push": "4.0.2",
     "email-validator": "^1.0.3",
     "gradle-to-js": "^2.0.0",
     "jsonwebtoken": "^8.3.0",
