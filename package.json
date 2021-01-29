@@ -30,7 +30,7 @@
   "author": "Microsoft Corporation",
   "license": "MIT",
   "dependencies": {
-    "backslash": "^0.1.7",
+    "backslash": "^0.2.0",
     "chalk": "^4.1.0",
     "cli-table3": "^0.6.0",
     "code-push": "2.0.6",
