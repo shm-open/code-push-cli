@@ -40,7 +40,7 @@
     "mkdirp": "^1.0.4",
     "moment": "^2.27.0",
     "opener": "^1.4.1",
-    "parse-duration": "0.1.1",
+    "parse-duration": "0.4.4",
     "plist": "^3.0.1",
     "progress": "^1.1.8",
     "prompt": "^0.2.14",
