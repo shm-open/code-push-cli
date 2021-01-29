@@ -43,7 +43,7 @@
     "parse-duration": "0.1.1",
     "plist": "^3.0.1",
     "progress": "^1.1.8",
-    "prompt": "^0.2.14",
+    "prompt": "^1.0.0",
     "properties": "^1.2.1",
     "recursive-fs": "0.1.4",
     "rimraf": "^3.0.2",
