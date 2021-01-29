@@ -48,7 +48,7 @@
     "recursive-fs": "0.1.4",
     "rimraf": "^3.0.2",
     "semver": "^7.3.2",
-    "simctl": "0.0.9",
+    "simctl": "2.0.0",
     "slash": "1.0.0",
     "update-notifier": "^2.5.0",
     "which": "^1.2.7",
