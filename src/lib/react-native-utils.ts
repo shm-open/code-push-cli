@@ -6,6 +6,7 @@ import { isValidVersion, isLowVersion } from './validation-utils';
 import { fileDoesNotExistOrIsDirectory } from './file-utils';
 import chalk from 'chalk';
 import * as cli from '../definitions/cli';
+import { coerce, compare } from 'semver';
 
 const plist = require('plist');
 const g2js = require('gradle-to-js/lib/parser');
@@ -79,11 +80,12 @@ export function getReactNativeProjectAppVersion(
             if (/MARKETING_VERSION/i.test(parsedPlist.CFBundleShortVersionString)) {
                 try {
                     const xcodeProjectConfig =
-                        path.resolve(resolvedPlistFile, "../") +
-                        ".xcodeproj/project.pbxproj";
+                        path.resolve(resolvedPlistFile, '../') + '.xcodeproj/project.pbxproj';
                     out.text(
-                        'Using xcodeProjectConfig version, file path "'
-                            .concat(xcodeProjectConfig, '".\n')
+                        'Using xcodeProjectConfig version, file path "'.concat(
+                            xcodeProjectConfig,
+                            '".\n',
+                        ),
                     );
                     const xcodeContents = fs.readFileSync(xcodeProjectConfig).toString();
 
@@ -98,15 +100,10 @@ export function getReactNativeProjectAppVersion(
                         break; // 因为我们只需要第一个匹配项，所以找到后就可以退出循环
                     }
                     out.text(
-                        'Using xcodeProjectConfig version, version "'.concat(
-                            xcodeVersion,
-                            '".\n'
-                        )
+                        'Using xcodeProjectConfig version, version "'.concat(xcodeVersion, '".\n'),
                     );
                     parsedPlist.CFBundleShortVersionString = xcodeVersion;
-                } catch (error) {
-
-                }
+                } catch (error) {}
             }
             if (isValidVersion(parsedPlist.CFBundleShortVersionString)) {
                 out.text(
@@ -288,10 +285,38 @@ export function getReactNativeProjectAppVersion(
 // https://github.com/microsoft/appcenter-cli/blob/13495af812558bd952d8aeb9dc01b5be089cd1fc/src/commands/codepush/lib/react-native-utils.ts#L277
 function getCliPath(): string {
     if (process.platform === 'win32') {
-        return path.join('node_modules', 'react-native', 'local-cli', 'cli.js');
+        const reactNativeVersion = coerce(getReactNativeVersion()).version;
+        const isVersion75OrAbove = compare(reactNativeVersion, '0.75.0') >= 0;
+        return isVersion75OrAbove
+            ? path.join(getReactNativePackagePath(), 'cli.js')
+            : path.join(getReactNativePackagePath(), 'local-cli', 'cli.js');
     }
 
     return path.join('node_modules', '.bin', 'react-native');
+}
+
+function directoryExistsSync(dirname: string): boolean {
+    try {
+        return fs.statSync(dirname).isDirectory();
+    } catch (err) {
+        if (err.code !== 'ENOENT') {
+            throw err;
+        }
+    }
+    return false;
+}
+
+function getReactNativePackagePath(): string {
+    const result = childProcess.spawnSync('node', [
+        '--print',
+        "require.resolve('react-native/package.json')",
+    ]);
+    const packagePath = path.dirname(result.stdout.toString());
+    if (result.status === 0 && directoryExistsSync(packagePath)) {
+        return packagePath;
+    }
+
+    return path.join('node_modules', 'react-native');
 }
 
 export function runReactNativeBundleCommand(
@@ -515,9 +540,11 @@ export async function getHermesEnabled(gradleFile?: string): Promise<boolean> {
         let hermesBuildEnabled = false;
 
         // 如果buildGradle["project.ext.react"]是一个数组，则继续处理
-        if (Array.isArray(buildGradle["project.ext.react"])) {
-            const reactSettings: string[] = buildGradle["project.ext.react"];
-            hermesBuildEnabled = reactSettings.some(line => /^enableHermes\s*:\s*true/.test(line));
+        if (Array.isArray(buildGradle['project.ext.react'])) {
+            const reactSettings: string[] = buildGradle['project.ext.react'];
+            hermesBuildEnabled = reactSettings.some((line) =>
+                /^enableHermes\s*:\s*true/.test(line),
+            );
         }
 
         return hermesPropertyEnabled || hermesBuildEnabled;
@@ -588,7 +615,7 @@ function getHermesCommand(): string {
         'sdks',
         'hermesc',
         getHermesOSBin(),
-        getHermesOSExe()
+        getHermesOSExe(),
     );
     if (fileExists(hermesEngineNew)) {
         return hermesEngineNew;
