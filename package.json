@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@shm-open/eslint-config-bundle": "1.9.13",
-    "@types/node": "16.11.45",
+    "@types/node": "16.18.126",
     "@types/semver": "7.3.10",
     "@types/which": "2.0.1",
     "@types/yargs": "17.0.10",
