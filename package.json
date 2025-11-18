@@ -61,7 +61,7 @@
     "@shm-open/eslint-config-bundle": "1.9.13",
     "@types/node": "16.11.45",
     "@types/semver": "7.3.10",
-    "@types/which": "2.0.1",
+    "@types/which": "2.0.2",
     "@types/yargs": "17.0.10",
     "@types/yazl": "2.4.2",
     "standard-version": "9.5.0",
