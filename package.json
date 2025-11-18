@@ -32,7 +32,7 @@
   "dependencies": {
     "backslash": "0.2.0",
     "chalk": "4.1.2",
-    "cli-table3": "0.6.2",
+    "cli-table3": "0.6.5",
     "code-push": "2.0.7",
     "email-validator": "2.0.4",
     "gradle-to-js": "2.0.1",
