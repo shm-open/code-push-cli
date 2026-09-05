@@ -602,6 +602,17 @@ function getHermesCommand(): string {
     if (fileExists(hermesEngine)) {
         return hermesEngine;
     }
+    // RN 0.83+: hermes moved to hermes-compiler npm package
+    const hermesCompiler = path.join(
+        'node_modules',
+        'hermes-compiler',
+        'hermesc',
+        getHermesOSBin(),
+        getHermesOSExe()
+    );
+    if (fileExists(hermesCompiler)) {
+        return hermesCompiler;
+    }
     return path.join('node_modules', 'hermesvm', getHermesOSBin(), 'hermes');
 }
 
